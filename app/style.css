@@ -1,0 +1,307 @@
+/* DocLock: a Typeform-like flow (one question per screen). Light and dark themes are the variables.
+   Generic parts (buttons, alerts, the snackbar, the menu) follow Material UI's metrics and colours
+   (mui.com/material-ui: Button, Alert, Snackbar, Menu), written here as plain CSS. */
+:root {
+  --bg: #f5f3ef; --fg: #1d1d1f; --accent: #0445af; --on-accent: #fff;
+  /* MUI: Standard alerts (icon colour, text, background per severity), the plain snackbar, disabled buttons, hover */
+  --success: #2e7d32; --success-fg: rgb(30 70 32); --success-bg: rgb(237 247 237);
+  --warning: #ed6c02; --warning-fg: rgb(102 60 0); --warning-bg: rgb(255 244 229);
+  --error: #d32f2f; --error-fg: rgb(95 33 32); --error-bg: rgb(253 237 237);
+  --info: #0288d1; --info-fg: rgb(1 67 97); --info-bg: rgb(229 246 253);
+  --snack: #323232; --on-snack: #fff;
+  --off: rgb(0 0 0 / 26%); --off-bg: rgb(0 0 0 / 12%); --hover: 4%;
+  --e2: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+  --e4: 0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%), 0 1px 10px 0 rgb(0 0 0 / 12%);
+  --e8: 0 5px 5px -3px rgb(0 0 0 / 20%), 0 8px 10px 1px rgb(0 0 0 / 14%), 0 3px 14px 2px rgb(0 0 0 / 12%);
+  --muted: color-mix(in srgb, var(--fg) 68%, var(--bg)); /* 4.5:1+ on --bg */
+  --soft: color-mix(in srgb, var(--accent) 10%, var(--bg));
+  --line: color-mix(in srgb, var(--accent) 30%, var(--bg));
+  --font: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif;
+  --ease: cubic-bezier(0.25, 0.9, 0.3, 1);
+  color-scheme: light dark;
+}
+/* Dark: The device's setting (Auto), unless Light or Dark was chosen (data-theme, theme.js) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15161a; --fg: #f1f1f3; --accent: #8db3ff; --on-accent: #0b1430;
+    --success: #66bb6a; --success-fg: rgb(204 232 205); --success-bg: rgb(12 19 13);
+    --warning: #ffa726; --warning-fg: rgb(255 226 183); --warning-bg: rgb(25 18 7);
+    --error: #f44336; --error-fg: rgb(244 199 199); --error-bg: rgb(22 11 11);
+    --info: #29b6f6; --info-fg: rgb(184 231 251); --info-bg: rgb(7 19 24);
+    --snack: #fafafa; --on-snack: rgb(0 0 0 / 87%);
+    --off: rgb(255 255 255 / 30%); --off-bg: rgb(255 255 255 / 12%); --hover: 8%;
+  }
+}
+:root[data-theme="dark"] {
+    --bg: #15161a; --fg: #f1f1f3; --accent: #8db3ff; --on-accent: #0b1430;
+    --success: #66bb6a; --success-fg: rgb(204 232 205); --success-bg: rgb(12 19 13);
+    --warning: #ffa726; --warning-fg: rgb(255 226 183); --warning-bg: rgb(25 18 7);
+    --error: #f44336; --error-fg: rgb(244 199 199); --error-bg: rgb(22 11 11);
+    --info: #29b6f6; --info-fg: rgb(184 231 251); --info-bg: rgb(7 19 24);
+    --snack: #fafafa; --on-snack: rgb(0 0 0 / 87%);
+    --off: rgb(255 255 255 / 30%); --off-bg: rgb(255 255 255 / 12%); --hover: 8%;
+  color-scheme: dark;
+}
+:root[data-theme="light"] { color-scheme: light; }
+
+* { box-sizing: border-box; }
+/* scrollbars: Just a slim rounded bar, no rail */
+* { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--fg) 28%, transparent) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; background: transparent; }
+::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: transparent; }
+::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--fg) 28%, transparent); border: 3px solid transparent; border-radius: 999px; background-clip: padding-box; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg); color: var(--fg); font: 20px/1.4 var(--font); -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; overflow: hidden; }
+main { flex: 1; position: relative; min-height: 0; overflow: clip; } /* the slide-in must not widen the page on phones */
+[hidden] { display: none !important; }
+a { color: var(--accent); }
+p { margin: 0; }
+
+#progress { position: fixed; inset: 0 0 auto; height: 4px; background: var(--soft); z-index: 3; }
+#progress span { display: block; height: 100%; width: 0; background: var(--accent); transition: width 0.5s var(--ease); }
+
+/* The status snackbar (MUI Snackbar, bottom centre, holding a standard Alert): 8px from the edges on a phone,
+   24px up and centred from 600px. In progress it is the plain dark snackbar with a spinner. */
+.snackbar {
+  position: fixed; left: 8px; right: 8px; bottom: calc(8px + env(safe-area-inset-bottom)); margin: 0 auto; z-index: 4;
+  display: flex; padding: 6px 16px; border-radius: 4px; font: 400 0.875rem/1.43 var(--font); letter-spacing: 0.01071em;
+  background: var(--snack); color: var(--on-snack); box-shadow: 0 3px 5px -1px rgb(0 0 0 / 20%), 0 6px 10px 0 rgb(0 0 0 / 14%), 0 1px 18px 0 rgb(0 0 0 / 12%);
+  opacity: 0; transform: scale(0.9); pointer-events: none; transition: opacity 0.2s, transform 0.2s var(--ease);
+}
+.snackbar.show { opacity: 1; transform: none; pointer-events: auto; }
+.snackbar.ok { background: var(--success-bg); color: var(--success-fg); --sign: var(--success); }
+.snackbar.warn { background: var(--warning-bg); color: var(--warning-fg); --sign: var(--warning); }
+.snackbar.err { background: var(--error-bg); color: var(--error-fg); --sign: var(--error); }
+#status-text { padding: 8px 0; min-width: 0; flex: 1; } /* fills the bar, so the close button sits at its right edge */
+#status-icon { display: flex; padding: 7px 0; margin-right: 12px; font-size: 22px; opacity: 0.9; color: var(--sign, inherit); }
+#status-icon:empty { display: none; }
+.snackbar.busy #status-icon { display: flex; }
+.snackbar.busy #status-icon::before { content: ""; width: 20px; height: 20px; border: 2px solid; border-right-color: transparent; border-radius: 50%; animation: spin 0.75s linear infinite; } /* MUI CircularProgress, 20px */
+@keyframes spin { to { transform: rotate(360deg); } }
+#status-close { margin: 3px -8px 0 12px; width: 30px; height: 30px; min-width: 30px; font-size: 20px; color: inherit; } /* MUI IconButton, small */
+#status-close:hover { background: color-mix(in srgb, currentColor 12%, transparent); color: inherit; }
+#status-icon .icon, #status-close .icon { width: 1em; height: 1em; }
+@media (min-width: 600px) { .snackbar { bottom: 24px; width: fit-content; min-width: 288px; max-width: 40rem; } }
+
+.frozen { cursor: progress; }
+.frozen a { pointer-events: none; opacity: 0.5; }
+
+/* one question per screen */
+.step {
+  position: absolute; inset: 0; display: flex; flex-direction: column; overflow-y: auto;
+  padding: 48px max(24px, calc(50% - 356px)) 12vh; animation: step-in 0.35s var(--ease) both; /* full width, so a scrollbar sits at the window's edge; content 712px max */
+}
+.step.leaving, #step-editor.leaving { animation: step-out 0.18s ease-in both; }
+/* centred when it fits, scrollable from the top when it does not */
+.step::before, .step::after { content: ""; flex: 1 0 0; }
+/* forward: in from the right, out to the left; back (body.back): the other way */
+@keyframes step-in { from { opacity: 0; transform: translateX(64px); } }
+@keyframes step-out { to { opacity: 0; transform: translateX(-64px); } }
+@keyframes step-in-back { from { opacity: 0; transform: translateX(-64px); } }
+@keyframes step-out-back { to { opacity: 0; transform: translateX(64px); } }
+body.back .step, body.back #step-editor { animation-name: step-in-back; }
+body.back .step.leaving, body.back #step-editor.leaving { animation-name: step-out-back; }
+body.still .step, body.still #step-editor { animation: none; }
+.q { display: block; font-size: 24px; line-height: 1.35; margin-bottom: 8px; }
+.desc { color: var(--muted); font-size: 18px; line-height: 1.6; margin-bottom: 28px; }
+.desc strong:not(.promise) { color: var(--fg); font-weight: 600; }
+/* setup guide */
+.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+.kicker { font-size: 14px; color: var(--muted); margin: 0 0 8px; }
+.copy { margin: 0 0 16px; --btn-text: 0.8125rem; --btn-pad: 4px 10px; }
+.copy-label { display: block; font-size: 14px; color: var(--muted); margin-bottom: 4px; }
+.copy-row { display: flex; align-items: center; gap: 8px; }
+.copy code { flex: 1; min-width: 0; overflow-wrap: anywhere; font: 15px/1.4 ui-monospace, Menlo, Consolas, monospace; background: var(--soft); border-radius: 4px; padding: 8px 10px; }
+
+input.answer {
+  width: 100%; font: 30px/1.3 var(--font); color: var(--accent); background: none; outline: none;
+  border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 0 0 8px; transition: border-color 0.2s, box-shadow 0.2s;
+}
+input.answer::placeholder { color: var(--line); }
+input.answer:focus { border-bottom-color: var(--accent); box-shadow: 0 1px 0 var(--accent); }
+.field { position: relative; }
+.field + .field { margin-top: 20px; }
+.field input.answer { padding-right: 48px; }
+
+/* Buttons (MUI Button). Contained by default; .ghost is outlined; in an alert they are text buttons.
+   The size of a button (text and padding) belongs to the PLACE it is in, never to its kind: A place sets
+   --btn-text and --btn-pad on itself (.tools, .notice, .copy) and every text button in it, primary or secondary,
+   gets exactly that. So two buttons side by side cannot differ in size. Do not give .ghost, or any rule
+   matching only some of the buttons in a place, a font-size, font-weight, padding or border.
+   Sizes are MUI's: Large (15px, 8px 22px) by default, medium (14px, 6px 16px), small (13px, 4px 10px). */
+button {
+  font: 500 var(--btn-text, 0.9375rem)/1.75 var(--font); letter-spacing: 0.02857em; text-transform: uppercase; min-width: 64px;
+  padding: var(--btn-pad, 8px 22px); border: 0; border-radius: 4px; cursor: pointer; color: var(--on-accent); background: var(--accent);
+  box-shadow: var(--e2); transition: background-color 0.25s, box-shadow 0.25s, color 0.25s;
+}
+button:hover { background: var(--btn-hover, color-mix(in srgb, var(--accent) 86%, #000)); box-shadow: var(--e4); }
+button:active { box-shadow: var(--e8); }
+button:disabled { color: var(--off); background: var(--btn-off, var(--off-bg)); box-shadow: none; cursor: default; }
+#save.pop { animation: pop 0.3s var(--ease); }
+@keyframes pop { from { transform: scale(0.85); opacity: 0.3; } }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+/* Outlined (.ghost): Differs from contained in colour only (see above); the outline is an inset shadow, not a border. */
+button.ghost { background: none; color: var(--accent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 50%, transparent); }
+button.ghost:hover { background: color-mix(in srgb, var(--accent) var(--hover), transparent); box-shadow: inset 0 0 0 1px var(--accent); }
+button.ghost:disabled { color: var(--off); background: none; box-shadow: inset 0 0 0 1px var(--off-bg); }
+/* Not text buttons: Links, icon buttons, the formatting bar, recents, menu items, the Preview switch */
+button.link, button.back, button.reveal, button.plain, #theme, #status-close, button.switch, .mdbar button, #recents button, .menu button {
+  text-transform: none; letter-spacing: normal; min-width: 0; background: none; box-shadow: none;
+  --btn-hover: none; --btn-off: none; --e4: none; --e8: none; /* no fill or lift on hover, press or when disabled */
+}
+button.back:hover, button.reveal:hover { background: color-mix(in srgb, var(--accent) var(--hover), transparent); }
+button.link { color: var(--muted); font: 400 15px/1.4 var(--font); padding: 4px 0; text-decoration: underline; }
+button.back { align-self: flex-start; color: var(--accent); font: 400 28px/1 var(--font); padding: 6px; margin: 0 0 20px -8px; border-radius: 50%; }
+button.reveal { position: absolute; right: 0; bottom: 10px; color: var(--accent); padding: 6px; font-size: 24px; line-height: 0; border-radius: 50%; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 24px; }
+.actions button { white-space: nowrap; }
+
+/* icons (Material Symbols, in index.html) */
+.sprite { position: absolute; width: 0; height: 0; }
+.icon { width: 1.2em; height: 1.2em; flex: none; fill: currentColor; }
+button.reveal .icon, button.back .icon { width: 1em; height: 1em; }
+button:has(> .icon) { display: inline-flex; align-items: center; gap: 8px; }
+button:not(.plain, .back, .reveal, #theme, #status-close) > .icon { width: 1.4em; height: 1.4em; margin-left: -4px; } /* MUI startIcon */
+button.icon-only { padding-left: 10px; padding-right: 10px; }
+/* bare icon buttons (Reload, More, theme): One fixed 40×40 circle, whatever the context.
+   The theme button keeps the same top-right corner on every screen (the editor's top bar leaves it free). */
+button.plain, #theme { box-sizing: border-box; flex: none; width: 40px; height: 40px; min-width: 40px; padding: 0; margin: 0; border: 0; display: inline-flex; align-items: center; justify-content: center; background: none; box-shadow: none; color: var(--muted); border-radius: 50%; } /* MUI IconButton */
+button.plain:hover, #theme:hover { background: var(--soft); color: var(--accent); }
+#theme { position: fixed; top: 10px; right: 10px; z-index: 3; }
+
+/* welcome */
+#step-signin { text-align: center; align-items: center; padding-top: 24px; padding-bottom: 16px; } /* the footer is the bottom margin */
+#step-signin h1 { font-size: 44px; font-weight: 400; letter-spacing: -0.01em; margin: 0 0 12px; }
+#step-signin .desc { max-width: 28em; }
+#setup-note { color: var(--fg); } /* the one thing to read on an unconfigured copy */
+.promise { display: inline-block; margin-bottom: 6px; color: var(--accent); font-weight: 600; }
+#step-signin .actions { justify-content: center; }
+.lock-mark { width: auto; height: 78px; margin-bottom: 8px; }
+.who { display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 4px 0 20px; }
+#who-pic { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; background: var(--soft); box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--line); margin-bottom: 8px; }
+#who-name { font-size: 22px; }
+#who-email { font-size: 12px; color: var(--muted); }
+#account-links { margin-top: 16px; }
+/* small print at the bottom of the welcome screen */
+#step-signin .specs { order: 1; max-width: 40em; margin-top: 24px; font-size: 12px; line-height: 1.5; color: var(--muted); }
+
+/* recent docs: chips with a remove × */
+#recents { list-style: none; padding: 0; margin: 32px 0 0; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; } /* pills 44px high and well apart: Easy to tap, hard to tap the wrong one */
+#recents .label { flex-basis: 100%; font-size: 15px; color: var(--muted); margin-bottom: 12px; }
+#recents .item { display: inline-flex; align-items: center; max-width: 100%; background: var(--soft); border-radius: 999px; transition: background 0.15s; }
+#recents .item:hover { background: color-mix(in srgb, var(--accent) 18%, var(--bg)); }
+#recents button { color: var(--accent); font-weight: 400; font-size: 16px; }
+#recents .choice { min-width: 0; min-height: 44px; padding: 8px 10px 8px 18px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 22rem; }
+#recents .forget { flex: none; min-width: 44px; min-height: 44px; font-size: 20px; line-height: 1; padding: 8px 14px 8px 10px; color: var(--muted); border-left: 1px solid color-mix(in srgb, var(--muted) 25%, transparent); border-radius: 0 999px 999px 0; }
+#recents .forget:hover { color: var(--fg); }
+
+/* editor: a full-screen writing surface */
+#step-editor { position: absolute; inset: 0; display: flex; flex-direction: column; overflow: hidden; padding-top: 10px; animation: step-in 0.35s var(--ease) both; --side: 24px; }
+/* Pinned: The top bar (full width, clear of the theme corner) and the formatting bar.
+   Only the text scrolls: The text box spans the width, so its scrollbar is at the
+   window's edge, and its padding keeps the text in a centred 760px column. */
+#step-editor > * { width: calc(100% - 2 * var(--side)); max-width: 760px; margin: 0 auto 12px; flex: none; }
+#step-editor > .bar { max-width: none; width: auto; min-height: 40px; margin: 0 calc(var(--side) + 36px) 12px var(--side); }
+#step-editor > #editor, #step-editor > #preview { flex: 1; width: 100%; max-width: none; min-height: 0; margin: 0; overflow-y: auto;
+  padding: 16px max(var(--side), calc((100% - 760px) / 2)) 24px; }
+.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.bar > * { flex-shrink: 0; }
+.bar button.back { margin: 0 -4px 0 -6px; font-size: 24px; }
+#doc-title { flex: 1 1 8em; max-width: max-content; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 22px; color: var(--fg); text-decoration: none; }
+#doc-title:hover { text-decoration: underline; }
+#doc-state { font-size: 14px; color: var(--muted); }
+.tools { position: relative; margin-left: auto; display: flex; gap: 8px; --btn-text: 0.875rem; --btn-pad: 6px 16px; } /* relative: The menu hangs from it */
+/* Alerts (MUI Alert, standard): A warning, or .info. An icon, the message, then text buttons on the right. */
+.notice { display: flex; flex-wrap: wrap; padding: 6px 16px; border-radius: 4px; font: 400 0.875rem/1.43 var(--font); letter-spacing: 0.01071em; color: var(--warning-fg); background: var(--warning-bg); --btn-text: 0.8125rem; --btn-pad: 4px 5px; }
+.notice.info { color: var(--info-fg); background: var(--info-bg); }
+.notice > .icon { width: 22px; height: 22px; margin: 7px 12px 7px 0; color: var(--warning); opacity: 0.9; }
+.notice.info > .icon { color: var(--info); }
+.notice > span { flex: 1 1 14em; min-width: 0; padding: 8px 0; }
+.notice button { align-self: flex-start; margin: 4px 0 0 8px; background: none; box-shadow: none; color: inherit; --btn-hover: color-mix(in srgb, currentColor var(--hover), transparent); --e4: none; --e8: none; }
+.notice span + button { margin-left: 16px; }
+.notice button:last-child { margin-right: -8px; }
+textarea { display: block; width: 100%; font: 17px/1.6 var(--font); color: var(--fg); background: none; border: 0; border-top: 1px solid var(--line); padding: 16px 0; outline: none; resize: none; }
+/* formatting bar and Preview */
+/* a rounded pill the width of the text column, a little apart from the top bar */
+/* the pill sticks out by --bleed on each side, so the first button's letter lines up with the text */
+#step-editor > .mdbar { --bleed: 20px; align-self: center; width: calc(100% - 2 * var(--side) + 2 * var(--bleed)); max-width: calc(760px + 2 * var(--bleed)); margin-top: 6px; margin-bottom: 4px; padding: 4px 6px 4px 8px; background: var(--soft); border-radius: 999px; }
+.mdbar { display: flex; align-items: center; gap: 6px; }
+#md-actions { flex: 1 1 auto; min-width: 0; display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; } /* one line; scrolls sideways on narrow screens */
+#md-actions::-webkit-scrollbar { display: none; }
+.mdbar button { background: none; box-shadow: none; color: var(--fg); font: 500 15px/1 var(--font); min-width: 34px; height: 32px; padding: 0 8px; border-radius: 4px; }
+.mdbar button:hover { background: color-mix(in srgb, var(--accent) 20%, var(--bg)); }
+.mdbar button[data-md="quote"] { font-size: 22px; padding-top: 8px; }
+#md-actions button { flex: none; }
+/* Preview: An on/off switch */
+.mdbar .switch { flex: none; margin-left: auto; display: inline-flex; align-items: center; gap: 8px; color: var(--muted); padding: 0 4px 0 8px; }
+.switch .track { position: relative; width: 34px; height: 20px; border-radius: 10px; background: var(--line); transition: background 0.2s; }
+.switch .track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--bg); box-shadow: 0 1px 2px rgb(0 0 0 / 30%); transition: transform 0.2s var(--ease); }
+.switch[aria-checked="true"] { color: var(--accent); }
+.switch[aria-checked="true"] .track { background: var(--accent); }
+.switch[aria-checked="true"] .track::after { transform: translateX(14px); }
+#step-editor > #preview { overflow-wrap: anywhere; font: 17px/1.6 var(--font); }
+#step-editor > #editor { border-top: 0; }
+.md > :first-child { margin-top: 8px; }
+.md h1, .md h2, .md h3, .md h4, .md h5, .md h6 { line-height: 1.25; margin: 1em 0 0.4em; font-weight: 600; }
+.md h1 { font-size: 1.7em; } .md h2 { font-size: 1.4em; } .md h3 { font-size: 1.2em; } .md h4, .md h5, .md h6 { font-size: 1em; }
+.md p, .md ul, .md ol, .md blockquote, .md pre { margin: 0 0 0.8em; }
+.md ul, .md ol { padding-left: 1.5em; }
+.md li.task { list-style: none; margin-left: -1.3em; }
+.md li.task input { margin: 0 0.35em 0 0; vertical-align: -0.1em; }
+.md blockquote { margin-left: 0; padding-left: 14px; border-left: 3px solid var(--line); color: var(--muted); }
+.md code { font: 0.9em ui-monospace, Menlo, Consolas, monospace; background: var(--soft); border-radius: 3px; padding: 0.1em 0.3em; }
+.md pre { background: var(--soft); border-radius: 4px; padding: 10px 12px; overflow-x: auto; }
+.md pre code { background: none; padding: 0; }
+.md hr { border: 0; border-top: 1px solid var(--line); margin: 1.2em 0; }
+.md a { color: var(--accent); }
+.hint { color: var(--muted); font-size: 15px; line-height: 1.5; margin-top: 12px; }
+.more { margin-top: 16px; }
+.small-label { display: block; color: var(--muted); font-size: 15px; margin: 20px 0 2px; }
+h2.q { font-weight: 400; margin-top: 0; }
+#step-decoy .notice, #newdecoy-box .notice { margin-top: 16px; }
+#newdecoy-box { margin-top: 20px; }
+#decoy-text { height: 18vh; min-height: 72px; margin-top: 6px; border: 1px solid var(--line); border-radius: 4px; padding: 12px; font: 15px/1.5 ui-monospace, Menlo, Consolas, monospace; }
+/* The editor's menu (MUI Menu): A sheet with an 8px lift; items 48px tall for a finger, from 600px as tall as their text. */
+.menu { position: absolute; top: calc(100% + 6px); right: 0; z-index: 4; display: flex; flex-direction: column; min-width: 12em; padding: 8px 0; border-radius: 4px; background: var(--bg); box-shadow: var(--e8), 0 0 0 1px color-mix(in srgb, var(--fg) 8%, transparent); }
+.tools .menu button { justify-content: flex-start; text-align: left; width: 100%; min-height: 48px; padding: 6px 16px; border-radius: 0; color: var(--fg); font: 400 1rem/1.5 var(--font); white-space: nowrap; }
+.tools .menu button:hover, .tools .menu button:focus-visible { background: color-mix(in srgb, var(--fg) var(--hover), transparent); }
+@media (min-width: 600px) { .tools .menu button { min-height: 0; } }
+#theirs { height: 28vh; border: 1px solid var(--line); border-radius: 4px; padding: 12px; font: 15px/1.5 ui-monospace, Menlo, Consolas, monospace; }
+
+/* phones, also held sideways */
+@media (max-width: 600px), (max-height: 500px) {
+  body { font-size: 18px; }
+  .step { padding: 32px 20px 6vh; }
+  .q { font-size: 20px; }
+  .desc { font-size: 16px; margin-bottom: 20px; }
+  input.answer { font-size: 24px; }
+  button.back { margin-bottom: 12px; }
+  #step-signin h1 { font-size: 34px; }
+  #step-editor { --side: 20px; }
+  #step-editor > * { margin-bottom: 8px; }
+  #step-editor > .mdbar { --bleed: 14px; padding-left: 6px; }
+  .mdbar button { min-width: 28px; padding: 0 6px; }
+  #step-editor > .bar { margin-right: calc(var(--side) + 40px); }
+  .bar { gap: 6px 10px; }
+  #doc-title { font-size: 18px; }
+  #doc-state { font-size: 12px; flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* takes what the buttons leave */
+  /* two rows: ← title (the theme button beside it); then the count, and the buttons on the right */
+  #step-editor > .bar::after { content: ""; order: 1; flex-basis: 100%; }
+  #step-editor > .bar > #doc-state, #step-editor > .bar > .tools { order: 2; }
+  #step-editor > .bar > .tools { margin-right: -40px; } /* below the theme button: The full width */
+  .tools { gap: 6px; }
+  .tools { --btn-text: 0.8125rem; --btn-pad: 4px 10px; }
+  textarea { font-size: 16px; } /* 16px+ keeps iOS from zooming in */
+}
+/* short screens: a more compact welcome, so it fits without scrolling */
+@media (max-height: 700px) {
+  .lock-mark { height: 60px; margin-bottom: 4px; }
+  #step-signin h1 { margin-bottom: 8px; }
+  #who-pic { width: 56px; height: 56px; margin-bottom: 4px; }
+  .who { margin-bottom: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .step, .step.leaving, #step-editor { animation-duration: 1ms; }
+  .snackbar { transition: opacity 0.2s; transform: none; }
+  .snackbar.busy #status-icon::before { animation-duration: 2s; }
+}

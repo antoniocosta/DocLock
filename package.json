@@ -1,0 +1,20 @@
+{
+  "name": "doclock",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "serve": "python3 dev/serve.py",
+    "e2e": "node dev/e2e.mjs",
+    "phones": "node dev/phones.mjs",
+    "demo": "node dev/demo.mjs",
+    "pictures": "node dev/phones.mjs && node dev/demo.mjs"
+  },
+  "license": "GPL-3.0-only",
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}

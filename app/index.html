@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en" translate="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data: https://*.googleusercontent.com; connect-src 'self' https://docs.googleapis.com https://www.googleapis.com https://openidconnect.googleapis.com; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="google" content="notranslate"><!-- page translation would send the decrypted text to a translation service -->
+<meta name="robots" content="noindex">
+<title>DocLock</title>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#f5f3ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15161a" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="style.css">
+<script src="theme.js"></script>
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<!-- Icons: Material Symbols Outlined and Material Icons by Google (Apache 2.0). -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-auto" viewBox="0 -960 960 960"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm40-83q119-15 199.5-104.5T800-480q0-123-80.5-212.5T520-797v634Z"/></symbol>
+  <symbol id="i-light" viewBox="0 -960 960 960"><path d="M480-360q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Zm0 80q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Zm326-268Z"/></symbol>
+  <symbol id="i-dark" viewBox="0 -960 960 960"><path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Zm0-80q88 0 158-48.5T740-375q-20 5-40 8t-40 3q-123 0-209.5-86.5T364-660q0-20 3-40t8-40q-78 32-126.5 102T200-480q0 116 82 198t198 82Zm-10-270Z"/></symbol>
+  <symbol id="i-back" viewBox="0 -960 960 960"><path d="m313-440 224 224-57 57-320-320 320-320 57 57-224 224h487v80H313Z"/></symbol>
+  <symbol id="i-reload" viewBox="0 -960 960 960"><path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/></symbol>
+  <symbol id="i-lock" viewBox="0 -960 960 960"><path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm296.5-143.5Q560-327 560-360t-23.5-56.5Q513-440 480-440t-56.5 23.5Q400-393 400-360t23.5 56.5Q447-280 480-280t56.5-23.5ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/></symbol>
+  <symbol id="i-show" viewBox="0 -960 960 960"><path d="M607.5-372.5Q660-425 660-500t-52.5-127.5Q555-680 480-680t-127.5 52.5Q300-575 300-500t52.5 127.5Q405-320 480-320t127.5-52.5Zm-204-51Q372-455 372-500t31.5-76.5Q435-608 480-608t76.5 31.5Q588-545 588-500t-31.5 76.5Q525-392 480-392t-76.5-31.5ZM214-281.5Q94-363 40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200q-146 0-266-81.5ZM480-500Zm207.5 160.5Q782-399 832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280q113 0 207.5-59.5Z"/></symbol>
+  <symbol id="i-hide" viewBox="0 -960 960 960"><path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z"/></symbol>
+  <symbol id="i-more" viewBox="0 -960 960 960"><path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/></symbol>
+  <symbol id="i-success" viewBox="0 0 24 24"><path d="M20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4C12.76,4 13.5,4.11 14.2,4.31L15.77,2.74C14.61,2.26 13.34,2 12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z"/></symbol>
+  <symbol id="i-warning" viewBox="0 0 24 24"><path d="M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/></symbol>
+  <symbol id="i-error" viewBox="0 0 24 24"><path d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><path d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></symbol>
+  <symbol id="i-unlock" viewBox="0 -960 960 960"><path d="M240-160h480v-400H240v400Zm296.5-143.5Q560-327 560-360t-23.5-56.5Q513-440 480-440t-56.5 23.5Q400-393 400-360t23.5 56.5Q447-280 480-280t56.5-23.5ZM240-160v-400 400Zm0 80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h280v-80q0-83 58.5-141.5T720-920q83 0 141.5 58.5T920-720h-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80h120q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Z"/></symbol>
+</svg>
+<div id="progress" aria-hidden="true"><span></span></div>
+<button id="theme" type="button"></button>
+<div id="status" class="snackbar" role="status" aria-live="polite"><span id="status-icon"></span><span id="status-text"></span><button id="status-close" type="button" class="plain" aria-label="Dismiss" title="Dismiss"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+<noscript><p>DocLock needs JavaScript.</p></noscript>
+
+<main>
+  <!-- welcome: sign in -->
+  <section id="step-signin" class="step" hidden>
+    <img class="lock-mark" src="logo.svg" alt="" width="72" height="78">
+    <h1>DocLock</h1>
+    <p class="desc"><strong class="promise">Strongly encrypted text in Google Docs.</strong><br>Your text and password never leave your browser unencrypted.</p>
+    <div id="who" class="who" hidden>
+      <img id="who-pic" alt="" referrerpolicy="no-referrer" width="72" height="72">
+      <span id="who-name"></span>
+      <span id="who-email"></span>
+    </div>
+    <p id="setup-note" class="desc" hidden>This copy isn’t connected to Google Docs yet. Setup is free and takes about 10 minutes, once.</p>
+    <div class="actions">
+      <button id="signin" type="button">Sign in with Google</button>
+    </div>
+    <p id="account-links" hidden><button id="other-account" type="button" class="link">Use another account</button> · <button id="sign-out" type="button" class="link">Forget account</button></p>
+    <p class="specs">Encrypts with <a href="https://en.wikipedia.org/wiki/Galois/Counter_Mode" target="_blank" rel="noopener">AES-256-GCM</a> and <a href="https://en.wikipedia.org/wiki/PBKDF2" target="_blank" rel="noopener">PBKDF2</a>-<a href="https://en.wikipedia.org/wiki/SHA-2" target="_blank" rel="noopener">SHA-256</a> (600,000 iterations, random salt), via the browser's <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API" target="_blank" rel="noopener">Web Crypto</a>.
+      All encryption happens only in your browser; Google never sees plain text and only stores the encrypted one.</p>
+  </section>
+
+  <!-- 1. which document -->
+  <section id="step-doc" class="step" hidden>
+    <form id="doc-form" autocomplete="off" novalidate>
+      <button type="button" class="back" id="back-doc" aria-label="Back" title="Back"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg></button>
+      <label for="link" class="q">Which doc?</label>
+      <p class="desc">Paste the Google Doc link.</p>
+      <input id="link" class="answer" type="url" inputmode="url" spellcheck="false" placeholder="https://docs.google.com/document/d/…">
+      <div class="actions">
+        <button type="submit">Next</button>
+      </div>
+    </form>
+    <ul id="recents"></ul>
+  </section>
+
+  <!-- new document: title -->
+  <section id="step-title" class="step" hidden>
+    <form id="title-form" autocomplete="off" novalidate>
+      <button type="button" class="back" id="back-title" aria-label="Back" title="Back"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg></button>
+      <label for="title" class="q">Name your doc</label>
+      <p class="desc">It goes in a DocLock folder in your Drive.</p>
+      <input id="title" class="answer" type="text" maxlength="200" spellcheck="false" placeholder="My notes">
+      <div class="actions">
+        <button type="submit">Next</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- new document: password -->
+  <section id="step-newpass" class="step" hidden>
+    <form id="newpass-form" autocomplete="off" novalidate>
+      <button type="button" class="back" id="back-newpass" aria-label="Back" title="Back"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg></button>
+      <label for="newpass" class="q">Choose a password</label>
+      <p class="desc">For this doc only. At least 8 characters; a long passphrase is best. If you forget it, the text is lost.</p>
+      <div class="field">
+        <input id="newpass" class="answer" type="password" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Type a password">
+        <button id="reveal-new" type="button" class="reveal" aria-label="Show password" aria-pressed="false" title="Show password"><svg class="icon" aria-hidden="true"><use href="#i-show"/></svg></button>
+      </div>
+      <div class="field">
+        <input id="newpass2" class="answer" type="password" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Type it again" aria-label="Repeat the password">
+      </div>
+      <p id="newdecoy-offer" class="more"><button id="add-decoy" type="button" class="link">Add a decoy</button></p>
+      <div id="newdecoy-box" hidden>
+        <label for="newdecoy" class="small-label">Decoy password</label>
+        <div class="field">
+          <input id="newdecoy" class="answer" type="password" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Decoy password (optional)" aria-describedby="newdecoy-hint newdecoy-warn">
+        </div>
+        <p id="newdecoy-hint" class="hint">A second password that opens a harmless text instead of yours. <a href="https://github.com/antoniocosta/DocLock/blob/main/docs/decoy.md" target="_blank" rel="noopener">How it works</a></p>
+        <p id="newdecoy-warn" class="notice"><svg class="icon" aria-hidden="true"><use href="#i-warning"/></svg><span>If you unlock with it, even just to test it, your real text is removed from the doc. Google Docs’ version history gets it back.</span></p>
+        <p class="more"><button id="no-decoy" type="button" class="link">No decoy</button></p>
+      </div>
+      <div class="actions">
+        <button type="submit"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Create</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- 2. password -->
+  <section id="step-password" class="step" hidden>
+    <form id="password-form" autocomplete="off" novalidate>
+      <button type="button" class="back" id="back-password" aria-label="Back" title="Back"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg></button>
+      <label for="password" class="q">Password</label>
+      <p class="desc" id="password-doc"></p>
+      <div class="field">
+        <input id="password" class="answer" type="password" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Type the password" aria-describedby="password-doc password-hint">
+        <button id="reveal" type="button" class="reveal" aria-label="Show password" aria-pressed="false" title="Show password"><svg class="icon" aria-hidden="true"><use href="#i-show"/></svg></button>
+      </div>
+      <p id="password-hint" class="hint" hidden>Unlocked this doc with a decoy password before? Your text is in an earlier version: In Google Docs, File → Version history. <a href="https://github.com/antoniocosta/DocLock/blob/main/docs/decoy.md#getting-your-text-back" target="_blank" rel="noopener">How</a></p>
+      <div class="actions">
+        <button type="submit"><svg class="icon" aria-hidden="true"><use href="#i-unlock"/></svg>Unlock</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- 3. editor -->
+  <section id="step-editor" hidden>
+    <div class="bar">
+      <button type="button" class="back" id="back-editor" aria-label="Back (locks the doc)" title="Back (locks the doc)"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg></button>
+      <a id="doc-title" target="_blank" rel="noopener noreferrer"></a>
+      <span id="doc-state"></span>
+      <span class="tools">
+        <button id="reload" type="button" class="plain icon-only" title="Reload from Google" aria-label="Reload from Google"><svg class="icon" aria-hidden="true"><use href="#i-reload"/></svg></button>
+        <button id="save" type="button" title="Save (Ctrl+S / ⌘S)">Save</button>
+        <button id="lock" type="button" class="ghost"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Lock</button>
+        <button id="more" type="button" class="plain icon-only" title="More" aria-label="More" aria-controls="menu" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-more"/></svg></button>
+        <span id="menu" class="menu" hidden>
+          <button id="menu-pass" type="button">Change password…</button>
+          <button id="menu-decoy" type="button">Decoy…</button>
+        </span>
+      </span>
+    </div>
+    <p id="draft" class="notice info" hidden><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg><span id="draft-text"></span>
+      <button id="draft-restore" type="button">Restore</button>
+      <button id="draft-discard" type="button" class="ghost">Discard</button></p>
+    <p id="tampered" class="notice" hidden><svg class="icon" aria-hidden="true"><use href="#i-warning"/></svg><span>Someone changed this doc with another tool. It is read-only here: A save would show them a second password. Copy your text to a new doc. <a href="https://github.com/antoniocosta/DocLock/blob/main/docs/decoy.md#if-someone-tampers-with-the-doc" target="_blank" rel="noopener">Why</a></span></p>
+    <div id="conflict" hidden>
+      <p class="notice"><svg class="icon" aria-hidden="true"><use href="#i-warning"/></svg><span>This doc was changed elsewhere. Nothing was overwritten. Their version is below; yours is in the editor.</span>
+        <button id="keep-mine" type="button">Keep mine</button>
+        <button id="use-theirs" type="button" class="ghost">Use theirs</button></p>
+      <label for="theirs" class="small-label">Their version</label>
+      <textarea id="theirs" readonly spellcheck="false"></textarea>
+    </div>
+    <div class="mdbar" role="toolbar" aria-label="Formatting">
+      <span id="md-actions">
+        <button type="button" data-md="bold" title="Bold (Ctrl+B / ⌘B)" aria-label="Bold"><b>B</b></button>
+        <button type="button" data-md="italic" title="Italic (Ctrl+I / ⌘I)" aria-label="Italic"><i>I</i></button>
+        <button type="button" data-md="strike" title="Strikethrough" aria-label="Strikethrough"><s>S</s></button>
+        <button type="button" data-md="heading" title="Heading" aria-label="Heading">H</button>
+        <button type="button" data-md="quote" title="Quote" aria-label="Quote">“</button>
+        <button type="button" data-md="bullets" title="Bulleted list" aria-label="Bulleted list">•</button>
+        <button type="button" data-md="numbers" title="Numbered list" aria-label="Numbered list">1.</button>
+        <button type="button" data-md="checklist" title="Checklist" aria-label="Checklist">☐</button>
+        <button type="button" data-md="code" title="Code" aria-label="Code">&lt;/&gt;</button>
+        <button type="button" data-md="link" title="Link" aria-label="Link">Link</button>
+      </span>
+      <button type="button" id="view-preview" class="switch" role="switch" aria-checked="false" title="Show the text formatted">Preview<span class="track" aria-hidden="true"></span></button>
+    </div>
+    <textarea id="editor" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Text" placeholder="Start writing… Markdown works."></textarea>
+    <div id="preview" class="md" hidden></div>
+  </section>
+
+  <!-- from the editor's menu: the decoy -->
+  <section id="step-decoy" class="step" hidden>
+    <form id="decoy-form" autocomplete="off" novalidate>
+      <button type="button" class="back" id="back-decoy" aria-label="Back" title="Back"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg></button>
+      <h2 class="q">Decoy</h2>
+      <p class="desc">A second password that opens the text below instead of yours. The doc does not show whether it has one. <a href="https://github.com/antoniocosta/DocLock/blob/main/docs/decoy.md" target="_blank" rel="noopener">How it works</a></p>
+      <label for="decoy-pass" class="small-label">Decoy password</label>
+      <div class="field">
+        <input id="decoy-pass" class="answer" type="password" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Decoy password" aria-describedby="decoy-warn">
+        <button id="reveal-decoy" type="button" class="reveal" aria-label="Show password" aria-pressed="false" title="Show password"><svg class="icon" aria-hidden="true"><use href="#i-show"/></svg></button>
+      </div>
+      <label for="decoy-text" class="small-label">Decoy text</label>
+      <textarea id="decoy-text" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="The text it opens. A made-up key works well."></textarea>
+      <p id="decoy-warn" class="notice"><svg class="icon" aria-hidden="true"><use href="#i-warning"/></svg><span>If you unlock with the decoy password, even just to test it, your real text is removed from the doc. Google Docs’ version history gets it back. To check the decoy, come back to this screen.</span></p>
+      <div class="actions">
+        <button type="submit">Save</button>
+        <button id="decoy-remove" type="button" class="ghost">Remove</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- from the editor's menu: a new password -->
+  <section id="step-pass" class="step" hidden>
+    <form id="pass-form" autocomplete="off" novalidate>
+      <button type="button" class="back" id="back-pass" aria-label="Back" title="Back"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg></button>
+      <label for="pass-new" class="q">Change password</label>
+      <p class="desc">For this doc only. At least 8 characters; a long passphrase is best. If you forget it, the text is lost.</p>
+      <div class="field">
+        <input id="pass-new" class="answer" type="password" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Type a new password">
+        <button id="reveal-pass" type="button" class="reveal" aria-label="Show password" aria-pressed="false" title="Show password"><svg class="icon" aria-hidden="true"><use href="#i-show"/></svg></button>
+      </div>
+      <div class="field">
+        <input id="pass-new2" class="answer" type="password" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Type it again" aria-label="Repeat the password">
+      </div>
+      <div class="actions">
+        <button type="submit"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Change</button>
+      </div>
+    </form>
+  </section>
+</main>
+</body>
+</html>
