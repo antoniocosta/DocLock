@@ -186,15 +186,15 @@ This is not legal advice. Laws differ by country and change.
 
 - **What it is for.** Protecting yourself from people with no right to
   your text: A thief, an attacker, someone threatening you.
-- **A lawful order is different.** In some countries a court or the
-  police can order you to hand over a password or the readable text, and
-  not complying is an offence. Among them are the UK
+- **A lawful order is different.** In some countries a court, the
+  police or another authority can order you to hand over a password or
+  the readable text, and not complying is an offence. Among them are the UK
   ([Regulation of Investigatory Powers Act 2000, section 49](https://www.legislation.gov.uk/ukpga/2000/23/section/49),
   with the offence in [section 53](https://www.legislation.gov.uk/ukpga/2000/23/section/53)),
   Australia ([Crimes Act 1914, section 3LA](https://www5.austlii.edu.au/au/legis/cth/consol_act/ca191482/s3la.html)),
   France
   ([Code pénal, article 434-15-2](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032654251))
-  and India (Information Technology Act 2000, section 69).
+  and India ([Information Technology Act 2000, section 69](https://indiankanoon.org/doc/1439440/)).
   Wikipedia keeps a
   [list by country](https://en.wikipedia.org/wiki/Key_disclosure_law). The
   decoy is no defence against such an order.
@@ -259,8 +259,9 @@ The law:
   complying).
 - France: [Code pénal, article 434-15-2](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032654251)
   (in French).
-- India: [Information Technology Act, 2000](https://en.wikipedia.org/wiki/Information_Technology_Act,_2000),
-  section 69.
+- India: [Information Technology Act, 2000, section 69](https://indiankanoon.org/doc/1439440/)
+  (a government order to decrypt or to help decrypt, and the offence of
+  not assisting; the text is on Indian Kanoon, not an official site).
 - Wikipedia: [Key disclosure law](https://en.wikipedia.org/wiki/Key_disclosure_law)
   and [Cryptography law](https://en.wikipedia.org/wiki/Cryptography_law),
   by country.
